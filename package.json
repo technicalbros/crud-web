@@ -14,5 +14,9 @@
     "@crud/core": "^2.0.5",
     "typescript": "^3.1.3",
     "webpack": "^4.20.2"
+  },
+  "peerDependencies": {
+    "@crud/core": "2.x.x",
+    "lodash": "4.x.x"
   }
 }

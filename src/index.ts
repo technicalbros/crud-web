@@ -1,10 +1,5 @@
 import * as _ from "lodash";
 
-export {default as fetchRequest} from "./fetchRequest";
-export {default as chooseFile} from "./chooseFile";
-export {default as redirect} from "./redirect";
-export {default as reload} from "./reload";
-
 declare global {
     interface FormData {
         merge(data: any): this
@@ -42,3 +37,9 @@ URLSearchParams.prototype.merge = function (data: Object) {
     mergeData(this, data);
     return this;
 }
+
+export {default as fetchRequest} from "./fetchRequest";
+export {default as chooseFile} from "./chooseFile";
+export {default as redirect} from "./redirect";
+export {default as reload} from "./reload";
+export {default as dialogs} from "./dialogs";

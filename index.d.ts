@@ -1,7 +1,3 @@
-export { default as fetchRequest } from "./fetchRequest";
-export { default as chooseFile } from "./chooseFile";
-export { default as redirect } from "./redirect";
-export { default as reload } from "./reload";
 declare global {
     interface FormData {
         merge(data: any): this;
@@ -13,3 +9,8 @@ declare global {
         url: string;
     }
 }
+export { default as fetchRequest } from "./fetchRequest";
+export { default as chooseFile } from "./chooseFile";
+export { default as redirect } from "./redirect";
+export { default as reload } from "./reload";
+export { default as dialogs } from "./dialogs";

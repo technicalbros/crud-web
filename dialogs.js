@@ -34,60 +34,32 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var _ = __importStar(require("lodash"));
-function chooseFile(config) {
+function dialogs($config) {
     var _this = this;
-    var callbacks = config.callbacks;
-    callbacks.chooseFile = function (_a) {
-        var _b = _a === void 0 ? {} : _a, multiple = _b.multiple, accept = _b.accept;
+    $config.callbacks.alert = function (_a) {
+        var title = _a.title, textContent = _a.textContent;
         return __awaiter(_this, void 0, void 0, function () {
-            var files, filesArray, _i, files_1, file;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0: return [4 /*yield*/, new Promise(function (resolve) {
-                            var changeHandler = function (e) {
-                                resolve(e.currentTarget.files);
-                            };
-                            var input = document.querySelector('.sk-file-input');
-                            if (!input) {
-                                input = document.createElement('input');
-                                input.type = "file";
-                                input.accept = _.isArray(accept) ? accept.join(",") : accept;
-                                input.multiple = multiple;
-                                input.style.display = "none";
-                                input.className = "sk-file-input";
-                                document.querySelector("body").appendChild(input);
-                            }
-                            input.addEventListener('change', changeHandler);
-                            input.click();
-                        })];
-                    case 1:
-                        files = _c.sent();
-                        filesArray = [];
-                        for (_i = 0, files_1 = files; _i < files_1.length; _i++) {
-                            file = files_1[_i];
-                            file.url = URL.createObjectURL(file);
-                            filesArray.push(file);
-                        }
-                        if (multiple) {
-                            return [2 /*return*/, filesArray];
-                        }
-                        else {
-                            return [2 /*return*/, files[0]];
-                        }
-                        return [2 /*return*/];
-                }
+            return __generator(this, function (_b) {
+                alert(title + " : " + textContent);
+                return [2 /*return*/];
             });
         });
     };
-    return config;
+    $config.callbacks.confirm = function (_a) {
+        var title = _a.title, textContent = _a.textContent;
+        return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_b) {
+                if (confirm(title + " : " + textContent)) {
+                    return [2 /*return*/, null];
+                }
+                else {
+                    throw null;
+                }
+                return [2 /*return*/];
+            });
+        });
+    };
+    return $config;
 }
-exports.default = chooseFile;
+exports.default = dialogs;
