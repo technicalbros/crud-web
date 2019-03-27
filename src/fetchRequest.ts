@@ -48,15 +48,26 @@ export default function fetchRequest(this: CrudRequest, $config: RequestOptions)
 
         try {
 
-            let res = await fetch(fullUrl, ajaxOptions);
+            let res: Response;
+            let responseText: string;
+            let response: any;
 
-            let responseText;
-            let response;
+            try {
+                res = await fetch(fullUrl, ajaxOptions);
+            } catch (error) {
+                throw {
+                    data: error,
+                    message: `${error.status}: ${error.statusText}`
+                }
+            }
 
             if (res.status === 200) {
                 responseText = await res.text()
             } else {
-                throw responseText;
+                throw {
+                    data: res,
+                    message: `${res.status}: ${res.statusText}`
+                }
             }
 
             try {
@@ -69,36 +80,30 @@ export default function fetchRequest(this: CrudRequest, $config: RequestOptions)
 
             if (method.toLowerCase() === 'get') {
                 return response;
-            } else {
+            } else if (!checkDataType || this.call("checkSuccess", [response])) {
 
                 notify && this.notify({
-                    type: response.type,
+                    type: "success",
                     message: response.message
                 });
 
-                if (!checkDataType || this.call("checkSuccess", [response])) {
-                    return response;
-                } else {
-                    throw response;
+                if (redirectTo) {
+                    this.redirect(redirectTo);
+                } else if (reloadPage) {
+                    this.reload();
                 }
 
+                return response;
+            } else {
+                throw response;
             }
-
-            if (redirectTo) {
-                this.redirect(redirectTo);
-            } else if (reloadPage) {
-                this.reload();
-            }
-
-            return data;
-
         } catch (error) {
 
             showProgress && this.toggleLoading(false);
 
             notify && this.notify({
                 type: "error",
-                message: `${error.status}: ${error.statusText}`
+                message: error.message
             });
 
             throw error
