@@ -49,7 +49,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function fetchRequest($config) {
     $config.callbacks.sendRequest = function (options) {
         return __awaiter(this, void 0, void 0, function () {
-            var config, data, url, _a, method, _b, baseUrl, _c, prefix, _d, suffix, _e, extension, _f, redirectTo, _g, showProgress, _h, checkDataType, _j, notify, _k, reloadPage, ajaxOptions, fullUrl, params, res, responseText, response, error_1;
+            var config, data, url, _a, method, _b, baseUrl, _c, prefix, _d, suffix, _e, extension, _f, redirectTo, _g, showProgress, _h, checkDataType, _j, notify, _k, reloadPage, ajaxOptions, fullUrl, params, res, responseText, response, error_1, error_2;
             return __generator(this, function (_l) {
                 switch (_l.label) {
                     case 0:
@@ -71,19 +71,34 @@ function fetchRequest($config) {
                         showProgress && this.toggleLoading(true);
                         _l.label = 1;
                     case 1:
-                        _l.trys.push([1, 6, , 7]);
-                        return [4 /*yield*/, fetch(fullUrl, ajaxOptions)];
-                    case 2:
-                        res = _l.sent();
+                        _l.trys.push([1, 9, , 10]);
+                        res = void 0;
                         responseText = void 0;
                         response = void 0;
-                        if (!(res.status === 200)) return [3 /*break*/, 4];
-                        return [4 /*yield*/, res.text()];
+                        _l.label = 2;
+                    case 2:
+                        _l.trys.push([2, 4, , 5]);
+                        return [4 /*yield*/, fetch(fullUrl, ajaxOptions)];
                     case 3:
-                        responseText = _l.sent();
+                        res = _l.sent();
                         return [3 /*break*/, 5];
-                    case 4: throw responseText;
+                    case 4:
+                        error_1 = _l.sent();
+                        throw {
+                            data: error_1,
+                            message: error_1.status + ": " + error_1.statusText
+                        };
                     case 5:
+                        if (!(res.status === 200)) return [3 /*break*/, 7];
+                        return [4 /*yield*/, res.text()];
+                    case 6:
+                        responseText = _l.sent();
+                        return [3 /*break*/, 8];
+                    case 7: throw {
+                        data: res,
+                        message: res.status + ": " + res.statusText
+                    };
+                    case 8:
                         try {
                             response = JSON.parse(responseText);
                         }
@@ -94,34 +109,32 @@ function fetchRequest($config) {
                         if (method.toLowerCase() === 'get') {
                             return [2 /*return*/, response];
                         }
-                        else {
+                        else if (!checkDataType || this.call("checkSuccess", [response])) {
                             notify && this.notify({
-                                type: response.type,
+                                type: "success",
                                 message: response.message
                             });
-                            if (!checkDataType || this.call("checkSuccess", [response])) {
-                                return [2 /*return*/, response];
+                            if (redirectTo) {
+                                this.redirect(redirectTo);
                             }
-                            else {
-                                throw response;
+                            else if (reloadPage) {
+                                this.reload();
                             }
+                            return [2 /*return*/, response];
                         }
-                        if (redirectTo) {
-                            this.redirect(redirectTo);
+                        else {
+                            throw response;
                         }
-                        else if (reloadPage) {
-                            this.reload();
-                        }
-                        return [2 /*return*/, data];
-                    case 6:
-                        error_1 = _l.sent();
+                        return [3 /*break*/, 10];
+                    case 9:
+                        error_2 = _l.sent();
                         showProgress && this.toggleLoading(false);
                         notify && this.notify({
                             type: "error",
-                            message: error_1.status + ": " + error_1.statusText
+                            message: error_2.message
                         });
-                        throw error_1;
-                    case 7: return [2 /*return*/];
+                        throw error_2;
+                    case 10: return [2 /*return*/];
                 }
             });
         });
